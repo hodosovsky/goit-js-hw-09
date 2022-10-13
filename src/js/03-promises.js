@@ -10,7 +10,7 @@ function onFormSubmit(event) {
   event.preventDefault();
   let delay = 0;
   let position = 0;
-  console.log('step', step.value);
+
   delay = +delayInput.value;
   for (let i = 1; i <= +amount.value; i += 1) {
     setTimeout(() => {
@@ -30,7 +30,6 @@ function onFormSubmit(event) {
 function createPromise(position, delay) {
   const shouldResolve = Math.random() > 0.3;
   //
-  console.log(delay);
 
   return new Promise((resolve, reject) => {
     setTimeout(() => {
