@@ -8,22 +8,23 @@ form.addEventListener('submit', onFormSubmit);
 
 function onFormSubmit(event) {
   event.preventDefault();
-  let delay = 0;
+  let delay = +delayInput.value;
   let position = 0;
 
-  delay = +delayInput.value;
   for (let i = 1; i <= +amount.value; i += 1) {
-    setTimeout(() => {
-      position += 1;
-      createPromise(position, delay)
-        .then(({ position, delay }) => {
+    position += 1;
+    createPromise(position, delay)
+      .then(({ position, delay }) => {
+        setTimeout(() => {
           Notify.success(`Fulfilled promise ${position} in ${delay}ms`);
-        })
-        .catch(({ position, delay }) => {
+        }, delay);
+      })
+      .catch(({ position, delay }) => {
+        setTimeout(() => {
           Notify.failure(`Rejected promise ${position} in ${delay}ms`);
-        });
-      delay += +step.value;
-    }, +delayInput.value);
+        }, delay);
+      });
+    delay += +step.value;
   }
 }
 
@@ -32,12 +33,10 @@ function createPromise(position, delay) {
   //
 
   return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (shouldResolve) {
-        resolve({ position, delay });
-      } else {
-        reject({ position, delay });
-      }
-    }, delay);
+    if (shouldResolve) {
+      resolve({ position, delay });
+    } else {
+      reject({ position, delay });
+    }
   });
 }
